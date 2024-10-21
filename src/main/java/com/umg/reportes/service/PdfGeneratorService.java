@@ -1,17 +1,21 @@
 package com.umg.reportes.service;
 
-import com.itextpdf.text.Document;
-import com.itextpdf.text.DocumentException;
-import com.itextpdf.text.Paragraph;
-import com.itextpdf.text.pdf.PdfWriter;
 import com.umg.reportes.models.UserEntity;
 import com.umg.reportes.repository.UserRepository;
-
+import net.sf.jasperreports.engine.JRException;
+import net.sf.jasperreports.engine.JasperCompileManager;
+import net.sf.jasperreports.engine.JasperExportManager;
+import net.sf.jasperreports.engine.JasperFillManager;
+import net.sf.jasperreports.engine.JasperPrint;
+import net.sf.jasperreports.engine.JasperReport;
+import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 import org.springframework.stereotype.Service;
 
+import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class PdfGeneratorService {
@@ -22,22 +26,24 @@ public class PdfGeneratorService {
         this.userRepository = userRepository;
     }
 
-    public void generarReporteUsuarios(String outputPath) throws FileNotFoundException, DocumentException {
+    public void generarReporteUsuarios(String outputPath) throws FileNotFoundException, JRException {
+        // Obtener los datos de los usuarios
         List<UserEntity> usuarios = userRepository.findAll();
 
-        Document document = new Document();
-        PdfWriter.getInstance(document, new FileOutputStream(outputPath));
+        // Cargar y compilar el archivo JRXML
+        File file = new File("src/main/resources/Empleados.jrxml");
+        JasperReport jasperReport = JasperCompileManager.compileReport(file.getAbsolutePath());
 
-        document.open();
-        for (UserEntity user : usuarios) {
-            document.add(new Paragraph("ID Usuario: " + user.getIdUsuario()));
-            document.add(new Paragraph("Nombre: " + user.getNombre()));
-            document.add(new Paragraph("Apellido: " + user.getApellido()));
-            document.add(new Paragraph("Email: " + user.getEmail()));
-            document.add(new Paragraph("Teléfono: " + user.getTelefono()));
-            document.add(new Paragraph("Enabled: " + (user.isEnabled() ? "Sí" : "No")));
-            document.add(new Paragraph("\n"));
-        }
-        document.close();
+        // Crear un data source con los usuarios
+        JRBeanCollectionDataSource dataSource = new JRBeanCollectionDataSource(usuarios);
+
+        // Parámetros si es que se necesitan
+        Map<String, Object> parameters = new HashMap<>();
+
+        // Rellenar el reporte con los datos y parámetros
+        JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, parameters, dataSource);
+
+        // Exportar a PDF
+        JasperExportManager.exportReportToPdfFile(jasperPrint, outputPath);
     }
 }
