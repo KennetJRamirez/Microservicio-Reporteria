@@ -51,7 +51,7 @@ public class ReporteController {
         // Preparar los datos para el reporte
         JRBeanCollectionDataSource dataSource = new JRBeanCollectionDataSource(marcajes);
 
-        // Mapear parámetros si es necesario
+        // Mapear parámetros
         Map<String, Object> parameters = new HashMap<>();
 
         // Llenar el reporte
@@ -70,4 +70,35 @@ public class ReporteController {
     public List<Marcaje> empleadosAntesDeHoraSalida() {
         return reporteService.obtenerEmpleadosAntesDeHoraSalida();
     }
+
+    @GetMapping("/pdf-antes-hora-salida")
+    public void generarPdfAntesDeHoraSalida(HttpServletResponse response) throws Exception {
+        response.setContentType("application/pdf");
+        response.setHeader("Content-Disposition", "inline; filename=empleados_antes_hora_salida.pdf");
+
+        // Obtener datos
+        List<Marcaje> marcajes = reporteService.obtenerEmpleadosAntesDeHoraSalida();
+
+        // Compilar el reporte
+        InputStream jasperStream = this.getClass().getResourceAsStream("/empleados_antes_hora_salida.jrxml");
+        JasperReport jasperReport = JasperCompileManager.compileReport(jasperStream);
+
+        // Preparar los datos para el reporte
+        JRBeanCollectionDataSource dataSource = new JRBeanCollectionDataSource(marcajes);
+
+        // Mapear parámetros
+        Map<String, Object> parameters = new HashMap<>();
+
+        // Llenar el reporte
+        JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, parameters, dataSource);
+
+        // Exportar a PDF
+        JRPdfExporter exporter = new JRPdfExporter();
+        exporter.setExporterInput(new SimpleExporterInput(jasperPrint));
+        exporter.setExporterOutput(new SimpleOutputStreamExporterOutput(response.getOutputStream()));
+
+        // Exportar
+        exporter.exportReport();
+    }
+
 }
