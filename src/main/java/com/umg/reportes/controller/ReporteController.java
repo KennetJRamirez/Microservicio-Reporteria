@@ -43,10 +43,13 @@ public class ReporteController {
     }
 
     @GetMapping("/pdf-fuera-horario")
-    public ResponseEntity<?> generarPdfFueraDeHorario(HttpServletResponse response) {
+    public ResponseEntity<?> generarPdfFueraDeHorario(
+            @RequestParam(defaultValue = "false") boolean descarga,
+            HttpServletResponse response) {
         try {
             response.setContentType("application/pdf");
-            response.setHeader("Content-Disposition", "attachment; filename=empleados_fuera_horario.pdf");
+            String disposition = descarga ? "attachment" : "inline";
+            response.setHeader("Content-Disposition", disposition + "; filename=empleados_fuera_horario.pdf");
 
             List<Marcaje> marcajes = reporteService.obtenerEmpleadosFueraDeHorario();
             InputStream jasperStream = this.getClass().getResourceAsStream("/empleados_fuera_horario.jrxml");
@@ -80,10 +83,13 @@ public class ReporteController {
     }
 
     @GetMapping("/pdf-antes-hora-salida")
-    public ResponseEntity<?> generarPdfAntesDeHoraSalida(HttpServletResponse response) {
+    public ResponseEntity<?> generarPdfAntesDeHoraSalida(
+            @RequestParam(defaultValue = "false") boolean descarga,
+            HttpServletResponse response) {
         try {
             response.setContentType("application/pdf");
-            response.setHeader("Content-Disposition", "attachment; filename=empleados_antes_hora_salida.pdf");
+            String disposition = descarga ? "attachment" : "inline";
+            response.setHeader("Content-Disposition", disposition + "; filename=empleados_antes_hora_salida.pdf");
 
             List<Marcaje> marcajes = reporteService.obtenerEmpleadosAntesDeHoraSalida();
             InputStream jasperStream = this.getClass().getResourceAsStream("/empleados_antes_hora_salida.jrxml");
@@ -106,10 +112,13 @@ public class ReporteController {
     }
 
     @GetMapping("/marcajeGeneral")
-    public ResponseEntity<?> generarReporteGeneral(HttpServletResponse response) {
+    public ResponseEntity<?> generarReporteGeneral(
+            @RequestParam(defaultValue = "false") boolean descarga,
+            HttpServletResponse response) {
         try {
             response.setContentType("application/pdf");
-            response.setHeader("Content-Disposition", "attachment; filename=marcaje_general.pdf");
+            String disposition = descarga ? "attachment" : "inline";
+            response.setHeader("Content-Disposition", disposition + "; filename=marcaje_general.pdf");
 
             List<Marcaje> marcajesGenenal = reporteService.marcajeGeneral();
             InputStream jasperStream = this.getClass().getResourceAsStream("/reporteGeneral.jrxml");
@@ -132,10 +141,14 @@ public class ReporteController {
     }
 
     @PostMapping("/departamento")
-    public ResponseEntity<?> generarReportePorDepartamento(@RequestBody Map<String, Integer> request, HttpServletResponse response) {
+    public ResponseEntity<?> generarReportePorDepartamento(
+            @RequestBody Map<String, Integer> request,
+            @RequestParam(defaultValue = "false") boolean descarga,
+            HttpServletResponse response) {
         try {
             response.setContentType("application/pdf");
-            response.setHeader("Content-Disposition", "attachment; filename=marcaje_departamento.pdf");
+            String disposition = descarga ? "attachment" : "inline";
+            response.setHeader("Content-Disposition", disposition + "; filename=marcaje_departamento.pdf");
 
             Integer departamentoId = request.get("departamentoId");
             List<Marcaje> marcajes = reporteService.marcajeXdepartamento(departamentoId);
@@ -159,10 +172,14 @@ public class ReporteController {
     }
 
     @PostMapping("/individual")
-    public ResponseEntity<?> generarReporteIndividual(@RequestBody Map<String, Long> request, HttpServletResponse response) {
+    public ResponseEntity<?> generarReporteIndividual(
+            @RequestBody Map<String, Long> request,
+            @RequestParam(defaultValue = "false") boolean descarga,
+            HttpServletResponse response) {
         try {
             response.setContentType("application/pdf");
-            response.setHeader("Content-Disposition", "attachment; filename=marcaje_individual.pdf");
+            String disposition = descarga ? "attachment" : "inline";
+            response.setHeader("Content-Disposition", disposition + "; filename=marcaje_individual.pdf");
 
             Long usuarioId = request.get("usuarioId");
             List<Marcaje> marcajes = reporteService.marcajeXusuario(usuarioId);
@@ -184,5 +201,4 @@ public class ReporteController {
                     .body(Map.of("codigo", 1, "mensaje", "Consulte con el administrador"));
         }
     }
-
 }
