@@ -61,7 +61,6 @@ CREATE TABLE Usuario (
     FOREIGN KEY (id_departamento) REFERENCES Departamento(id_departamento),
     FOREIGN KEY (id_departamento) REFERENCES Horario (id_horario)
 );
-drop table usuario
 
 CREATE TABLE Horario (
     id_horario SERIAL PRIMARY KEY,
@@ -93,9 +92,9 @@ CREATE TABLE UsuarioRol (
 ### Conexión a la base de datos
 Para poder acceder a la base de datos es necesário utilizar los siguientes datos de autenticación y conexión:
 
-*Usuario*: dw_user
-*Password:* Dw2024+
-*IP/Host:* 3.145.108.23
+- *Usuario*: dw_user
+- *Password:* Dw2024+
+- *IP/Host:* 3.145.108.23
 
 **Para conectarse a la base de datos**
 Para poder conectarse a la base de datos utilizamos la herramienta de pgAdmin y seguimos el siguiente paso a paso:
