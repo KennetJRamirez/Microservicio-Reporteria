@@ -242,6 +242,8 @@ La aplicación se ejecuta por medio de microservicios distribuídos en distintas
 - **/nuevo** Permite ingresar un nuevo usuario
 - **/reset-password** PUT reinicia la contraseña del usuario
 - **/rol/{idUsuario}** Obtener los roles de los usuarios por su id
+- **/{id}** PUT actualizar usuario por su id
+- **/{id}** DELETE eliminar un usuario por su id
 ### Funciones utilizadas para el Login
 Para la función de Login se utilizó el sistema de Keycloak. La clase a continuación es la clase KeycloackService.kt la cuál cuenta con varias funciones para obtener la información de empleados, registro de usuarios, asignación de roles y restablecimiento de contraseñas.
  **Propiedades de la clase principal**
