@@ -3,11 +3,19 @@
               xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports 
                                   http://jasperreports.sourceforge.net/xsd/jasperreport.xsd"
-              name="empleados_antes_hora_salida" pageWidth="595" pageHeight="842" columnCount="1"
-              leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20">
+              name="empleados_antes_hora_salida" pageWidth="595" pageHeight="842"
+              columnWidth="535" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20">
 
-    <style name="TableHeader" mode="Opaque" forecolor="#FFFFFF" backcolor="#4CAF50" fontName="SansSerif" fontSize="12" isBold="true"/>
-    <style name="TableRow" mode="Opaque" backcolor="#F0F0F0" fontName="SansSerif" fontSize="10"/>
+    <style name="Title" forecolor="#FFFFFF" fontName="Times New Roman" fontSize="50" isBold="false"/>
+    <style name="SubTitle" forecolor="#CCCCCC" fontName="Times New Roman" fontSize="12" isBold="false"/>
+    <style name="Column header" forecolor="#666666" fontName="Times New Roman" fontSize="12" isBold="true"/>
+    <style name="Detail" mode="Transparent" fontName="Times New Roman"/>
+    <style name="Row" mode="Transparent" fontName="Times New Roman" pdfFontName="Times-Roman">
+        <conditionalStyle>
+            <conditionExpression><![CDATA[$V{REPORT_COUNT}%2 == 0]]></conditionExpression>
+            <style mode="Opaque" backcolor="#F0EFEF"/>
+        </conditionalStyle>
+    </style>
 
     <field name="idMarcaje" class="java.lang.Integer"/>
     <field name="usuario.nombre" class="java.lang.String"/>
@@ -17,59 +25,59 @@
     <field name="horaSalida" class="java.sql.Time"/>
 
     <title>
-        <band height="50">
-            <textField>
-                <reportElement x="0" y="10" width="555" height="30" backcolor="#4CAF50"/>
-                <textElement textAlignment="Center" verticalAlignment="Middle">
-                    <font fontName="SansSerif" size="16" isBold="true" />
-                </textElement>
-                <textFieldExpression><![CDATA["Reporte de Empleados que Marcaron Antes de la Hora de Salida"]]></textFieldExpression>
-            </textField>
+        <band height="142" splitType="Stretch">
+            <image>
+                <reportElement x="456" y="0" width="99" height="132"/>
+                <imageExpression><![CDATA["images.png"]]></imageExpression>
+            </image>
+            <frame>
+                <reportElement mode="Opaque" x="0" y="0" width="451" height="95" backcolor="#000000"/>
+                <staticText>
+                    <reportElement style="Title" x="0" y="0" width="370" height="66"/>
+                    <text><![CDATA[Reportes UMG]]></text>
+                </staticText>
+                <staticText>
+                    <reportElement style="SubTitle" x="157" y="66" width="249" height="29"/>
+                    <text><![CDATA[Marcaje Antes de la Hora de Salida]]></text>
+                </staticText>
+            </frame>
+            
+<frame>
+    <reportElement mode="Opaque" x="0" y="100" width="451" height="32" forecolor="#000000" backcolor="#CC0000"/>
+    <textField>
+        <reportElement x="307" y="12" width="144" height="20" forecolor="#FFFFFF"/>
+        <textFieldExpression><![CDATA[
+            new java.text.SimpleDateFormat("dd/MM/yyyy HH:mm", new java.util.Locale("es", "ES")).format(new java.util.Date())
+        ]]></textFieldExpression>
+    </textField>
+</frame>
         </band>
     </title>
 
     <columnHeader>
         <band height="30">
             <staticText>
-                <reportElement style="TableHeader" x="10" y="0" width="90" height="30"/>
-                <textElement textAlignment="Center">
-                    <font fontName="SansSerif" size="12" isBold="true" />
-                </textElement>
+                <reportElement style="Column header" x="10" y="0" width="90" height="30"/>
                 <text><![CDATA[ID Marcaje]]></text>
             </staticText>
             <staticText>
-                <reportElement style="TableHeader" x="100" y="0" width="90" height="30"/>
-                <textElement textAlignment="Center">
-                    <font fontName="SansSerif" size="12" isBold="true" />
-                </textElement>
+                <reportElement style="Column header" x="100" y="0" width="90" height="30"/>
                 <text><![CDATA[Nombre]]></text>
             </staticText>
             <staticText>
-                <reportElement style="TableHeader" x="190" y="0" width="90" height="30"/>
-                <textElement textAlignment="Center">
-                    <font fontName="SansSerif" size="12" isBold="true" />
-                </textElement>
+                <reportElement style="Column header" x="190" y="0" width="90" height="30"/>
                 <text><![CDATA[Apellido]]></text>
             </staticText>
             <staticText>
-                <reportElement style="TableHeader" x="280" y="0" width="90" height="30"/>
-                <textElement textAlignment="Center">
-                    <font fontName="SansSerif" size="12" isBold="true" />
-                </textElement>
+                <reportElement style="Column header" x="280" y="0" width="90" height="30"/>
                 <text><![CDATA[Fecha]]></text>
             </staticText>
             <staticText>
-                <reportElement style="TableHeader" x="370" y="0" width="90" height="30"/>
-                <textElement textAlignment="Center">
-                    <font fontName="SansSerif" size="12" isBold="true" />
-                </textElement>
+                <reportElement style="Column header" x="370" y="0" width="90" height="30"/>
                 <text><![CDATA[Hora Entrada]]></text>
             </staticText>
             <staticText>
-                <reportElement style="TableHeader" x="460" y="0" width="90" height="30"/>
-                <textElement textAlignment="Center">
-                    <font fontName="SansSerif" size="12" isBold="true" />
-                </textElement>
+                <reportElement style="Column header" x="460" y="0" width="90" height="30"/>
                 <text><![CDATA[Hora Salida]]></text>
             </staticText>
         </band>
@@ -78,47 +86,61 @@
     <detail>
         <band height="20">
             <textField>
-                <reportElement style="TableRow" x="10" y="0" width="90" height="20"/>
-                <textElement textAlignment="Center">
-                    <font fontName="SansSerif" size="10" />
-                </textElement>
+                <reportElement style="Row" x="10" y="0" width="90" height="20"/>
                 <textFieldExpression><![CDATA[$F{idMarcaje}]]></textFieldExpression>
             </textField>
             <textField>
-                <reportElement style="TableRow" x="100" y="0" width="90" height="20"/>
-                <textElement textAlignment="Center">
-                    <font fontName="SansSerif" size="10" />
-                </textElement>
+                <reportElement style="Row" x="100" y="0" width="90" height="20"/>
                 <textFieldExpression><![CDATA[$F{usuario.nombre}]]></textFieldExpression>
             </textField>
             <textField>
-                <reportElement style="TableRow" x="190" y="0" width="90" height="20"/>
-                <textElement textAlignment="Center">
-                    <font fontName="SansSerif" size="10" />
-                </textElement>
+                <reportElement style="Row" x="190" y="0" width="90" height="20"/>
                 <textFieldExpression><![CDATA[$F{usuario.apellido}]]></textFieldExpression>
             </textField>
             <textField>
-                <reportElement style="TableRow" x="280" y="0" width="90" height="20"/>
-                <textElement textAlignment="Center">
-                    <font fontName="SansSerif" size="10" />
-                </textElement>
+                <reportElement style="Row" x="280" y="0" width="90" height="20"/>
                 <textFieldExpression><![CDATA[new java.text.SimpleDateFormat("yyyy-MM-dd").format($F{fechaMarcaje})]]></textFieldExpression>
             </textField>
             <textField>
-                <reportElement style="TableRow" x="370" y="0" width="90" height="20"/>
-                <textElement textAlignment="Center">
-                    <font fontName="SansSerif" size="10" />
-                </textElement>
+                <reportElement style="Row" x="370" y="0" width="90" height="20"/>
                 <textFieldExpression><![CDATA[new java.text.SimpleDateFormat("HH:mm:ss").format($F{horaEntrada})]]></textFieldExpression>
             </textField>
             <textField>
-                <reportElement style="TableRow" x="460" y="0" width="90" height="20"/>
-                <textElement textAlignment="Center">
-                    <font fontName="SansSerif" size="10" />
-                </textElement>
+                <reportElement style="Row" x="460" y="0" width="90" height="20"/>
                 <textFieldExpression><![CDATA[new java.text.SimpleDateFormat("HH:mm:ss").format($F{horaSalida})]]></textFieldExpression>
             </textField>
         </band>
     </detail>
+
+<pageFooter>
+    <band height="25" splitType="Stretch">
+        <frame>
+            <reportElement mode="Opaque" x="0" y="1" width="555" height="24" forecolor="#D0B48E" backcolor="#000000"/>
+            <textField evaluationTime="Report">
+                <reportElement style="Column header" x="513" y="0" width="40" height="20" forecolor="#FFFFFF"/>
+                <textElement verticalAlignment="Middle">
+                    <font size="10" isBold="false"/>
+                </textElement>
+                <textFieldExpression><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
+            </textField>
+            <textField>
+                <reportElement style="Column header" x="433" y="0" width="80" height="20" forecolor="#FFFFFF"/>
+                <textElement textAlignment="Right" verticalAlignment="Middle">
+                    <font size="10" isBold="false"/>
+                </textElement>
+                <textFieldExpression><![CDATA["Página " + $V{PAGE_NUMBER} + " de"]]></textFieldExpression>
+            </textField>
+            <textField pattern="EEEEE dd MMMMM yyyy">
+                <reportElement style="Column header" x="2" y="1" width="197" height="20" forecolor="#FFFFFF"/>
+                <textElement verticalAlignment="Middle">
+                    <font size="10" isBold="false"/>
+                </textElement>
+                <textFieldExpression><![CDATA[
+                    new java.text.SimpleDateFormat("EEEE dd 'de' MMMMM 'de' yyyy", new java.util.Locale("es", "ES")).format(new java.util.Date())
+                ]]></textFieldExpression>
+            </textField>
+        </frame>
+    </band>
+</pageFooter>
+
 </jasperReport>
